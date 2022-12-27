@@ -14,15 +14,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.25.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Stanford.NLP.NER" Version="4.2.0.2" Aliases="NER"/>
-    <PackageReference Include="Stanford.NLP.Parser" Version="4.2.0.2" Aliases="Parser"/>
-    <PackageReference Include="Stanford.NLP.POSTagger" Version="4.2.0.2" Aliases="POSTagger"/>
-    <PackageReference Include="Stanford.NLP.Segmenter" Version="4.2.0.2" Aliases="Segmenter"/>
+    <PackageReference Include="Stanford.NLP.CoreNLP" Version="4.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\" />
   </ItemGroup>
 
   <ItemGroup>

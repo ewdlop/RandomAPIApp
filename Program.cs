@@ -1,12 +1,12 @@
-extern alias POSTagger;
-
+using edu.stanford.nlp.ling;
+using edu.stanford.nlp.tagger.maxent;
 using java.util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using POSTagger::edu.stanford.nlp.ling;
-using POSTagger::edu.stanford.nlp.tagger.maxent;
+using RandomAPIApp.DTOs;
 using RandomAPIApp.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -118,14 +118,9 @@ app.MapGet("/jwt", (IOptions<JWTOptions> options) =>
 .WithDescription("Get JWT Token for authorization")
 .WithTags("Token");
 
-app.MapGet("/pos", () =>
+app.MapPost("/api/pos", ([FromBody] PartOfSpeechTaggerDTO pos) =>
 {
-    // Text for tagging
-    string text = "A Part-Of-Speech Tagger (POS Tagger) is a piece of software that reads text"
-                + "in some language and assigns parts of speech to each word (and other token),"
-                + " such as noun, verb, adjective, etc., although generally computational "
-                + "applications use more fine-grained POS tags like 'noun-plural'.";
-    object[] sentences = MaxentTagger.tokenizeText(new java.io.StringReader(text)).toArray();
+    object[] sentences = MaxentTagger.tokenizeText(new java.io.StringReader(pos.Input)).toArray();
     string[] taggedSentences = new string[sentences.Length];
     int i = 0;
     foreach (List sentence in sentences.Cast<List>())
@@ -134,9 +129,13 @@ app.MapGet("/pos", () =>
         taggedSentences[i] = SentenceUtils.listToString(taggedSentence, false);
         i++;
     }
-    return Results.Ok(taggedSentences);
-}).Produces<string[]>(StatusCodes.Status200OK)
-.Produces<string>(StatusCodes.Status401Unauthorized)
+    return Results.Ok(new PartOfSpeechTaggerDTO
+    {
+        Input = pos.Input,
+        Output = taggedSentences
+    });
+}).Produces<PartOfSpeechTaggerDTO>(StatusCodes.Status200OK)
+.Produces(StatusCodes.Status401Unauthorized)
 .RequireAuthorization(Policy.USER_NAME)
 .WithDescription("Part-Of-Speech Tagger")
 .WithTags("Part-Of-Speech Tagger");
@@ -156,3 +155,9 @@ public class Policy
 {
     public const string USER_NAME = "UserName";
 }
+
+// Text for tagging
+//string text = "A Part-Of-Speech Tagger (POS Tagger) is a piece of software that reads text"
+//            + "in some language and assigns parts of speech to each word (and other token),"
+//            + " such as noun, verb, adjective, etc., although generally computational "
+//            + "applications use more fine-grained POS tags like 'noun-plural'.";
