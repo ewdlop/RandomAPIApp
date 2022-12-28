@@ -1,3 +1,4 @@
+using edu.stanford.nlp.ie.crf;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.parser.lexparser;
 using edu.stanford.nlp.process;
@@ -58,7 +59,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
     });
     //this is a dictionary....
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement() 
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
         {
             new OpenApiSecurityScheme
@@ -78,8 +79,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthorizationBuilder()
   .AddPolicy(Policy.USER_NAME, policy =>
         policy.RequireClaim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Name));
-            
-            
+
+
 WebApplication app = builder.Build();
 
 app.UseSwagger();
@@ -167,7 +168,7 @@ app.MapPost("/api/parser", ([FromBody] ParserDTO parser) =>
     //var tp = new TreePrint("penn,typedDependenciesCollapsed");
     //tp.printTree(tree2);
     string output = SentenceUtils.listToString(tdl, false);
-    return Results.Ok(new ParserDTO() 
+    return Results.Ok(new ParserDTO()
     {
         Input = parser.Input,
         Output = output
@@ -176,17 +177,26 @@ app.MapPost("/api/parser", ([FromBody] ParserDTO parser) =>
 .Produces(StatusCodes.Status401Unauthorized)
 .WithTags("Parser");
 
+app.MapPost("/api/NER", (string s1) => {
+    string outpt = StanfordNLP.NamedEntityRecognizer.Value.classifyToString(s1);
+    return Results.Ok(outpt);
+}).Produces<string>(StatusCodes.Status200OK)
+.Produces(StatusCodes.Status401Unauthorized)
+.WithTags("Named Entity Recognizer"); ;
+
 app.Run();
 
 public class StanfordNLPModelPath
 {
     public const string POS = "english-left3words-distsim.tagger";
     public const string PARSER = "englishPCFG.ser.gz"; //English Probabilistic Context-Free Grammar
+    public const string NAMED_ENTITY_RECOGNIZER = "english.all.3class.distsim.crf.ser.gz";
 }
 public static class StanfordNLP
 {
-    public readonly static Lazy<MaxentTagger> MaxentTagger = new Lazy<MaxentTagger>(()=>new MaxentTagger(StanfordNLPModelPath.POS));
-    public readonly static Lazy<LexicalizedParser> Parser = new Lazy<LexicalizedParser>(()=> LexicalizedParser.loadModel(StanfordNLPModelPath.PARSER));
+    public readonly static Lazy<MaxentTagger> MaxentTagger = new Lazy<MaxentTagger>(() => new MaxentTagger(StanfordNLPModelPath.POS));
+    public readonly static Lazy<LexicalizedParser> Parser = new Lazy<LexicalizedParser>(() => LexicalizedParser.loadModel(StanfordNLPModelPath.PARSER));
+    public readonly static Lazy<CRFClassifier> NamedEntityRecognizer = new Lazy<CRFClassifier>(() => CRFClassifier.getClassifierNoExceptions(StanfordNLPModelPath.NAMED_ENTITY_RECOGNIZER));
 }
 
 public class Policy
