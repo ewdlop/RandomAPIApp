@@ -22,6 +22,12 @@
     <None Update="english-left3words-distsim.tagger">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="english.all.3class.distsim.crf.ser.gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="englishPCFG.ser.gz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
