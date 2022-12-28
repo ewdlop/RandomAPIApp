@@ -1,5 +1,8 @@
 using edu.stanford.nlp.ling;
+using edu.stanford.nlp.parser.lexparser;
+using edu.stanford.nlp.process;
 using edu.stanford.nlp.tagger.maxent;
+using edu.stanford.nlp.trees;
 using java.util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -120,7 +123,8 @@ app.MapGet("/jwt", (IOptions<JWTOptions> options) =>
 
 app.MapPost("/api/pos", ([FromBody] PartOfSpeechTaggerDTO pos) =>
 {
-    object[] sentences = MaxentTagger.tokenizeText(new java.io.StringReader(pos.Input)).toArray();
+    java.io.StringReader reader = new java.io.StringReader(pos.Input);
+    object[] sentences = MaxentTagger.tokenizeText(reader).toArray();
     string[] taggedSentences = new string[sentences.Length];
     int i = 0;
     foreach (List sentence in sentences.Cast<List>())
@@ -129,6 +133,7 @@ app.MapPost("/api/pos", ([FromBody] PartOfSpeechTaggerDTO pos) =>
         taggedSentences[i] = SentenceUtils.listToString(taggedSentence, false);
         i++;
     }
+    reader.close();
     return Results.Ok(new PartOfSpeechTaggerDTO
     {
         Input = pos.Input,
@@ -140,15 +145,48 @@ app.MapPost("/api/pos", ([FromBody] PartOfSpeechTaggerDTO pos) =>
 .WithDescription("Part-Of-Speech Tagger")
 .WithTags("Part-Of-Speech Tagger");
 
+app.MapPost("/api/parser", ([FromBody] ParserDTO parser) =>
+{
+    //The PTB (Penn Treebank) Tokenizer is a tool for dividing a block of text into individual tokens,
+    //or "words," that are appropriate for use in natural language processing tasks
+    TokenizerFactory tokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
+    java.io.StringReader sentenceReader = new java.io.StringReader(parser.Input);
+    List rawWords = tokenizerFactory.getTokenizer(sentenceReader).tokenize();
+    sentenceReader.close();
+    Tree tree2 = StanfordNLP.Parser.Value.apply(rawWords);
+    ////prints out a representation of a tree in Penn Treebank format.
+    ////The Penn Treebank is a set of annotated corpora for natural language processing tasks,
+    ////including part-of-speech tagging and parsing.
+    //tree2.pennPrint();
+
+    // Extract dependencies from lexical tree
+    PennTreebankLanguagePack tlp = new PennTreebankLanguagePack();
+    GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
+    GrammaticalStructure gs = gsf.newGrammaticalStructure(tree2);
+    List tdl = gs.typedDependenciesCCprocessed();
+    //var tp = new TreePrint("penn,typedDependenciesCollapsed");
+    //tp.printTree(tree2);
+    string output = SentenceUtils.listToString(tdl, false);
+    return Results.Ok(new ParserDTO() 
+    {
+        Input = parser.Input,
+        Output = output
+    });
+}).Produces<ParserDTO>(StatusCodes.Status200OK)
+.Produces(StatusCodes.Status401Unauthorized)
+.WithTags("Parser");
+
 app.Run();
 
 public class StanfordNLPModelPath
 {
     public const string POS = "english-left3words-distsim.tagger";
+    public const string PARSER = "englishPCFG.ser.gz"; //English Probabilistic Context-Free Grammar
 }
 public static class StanfordNLP
 {
     public readonly static Lazy<MaxentTagger> MaxentTagger = new Lazy<MaxentTagger>(()=>new MaxentTagger(StanfordNLPModelPath.POS));
+    public readonly static Lazy<LexicalizedParser> Parser = new Lazy<LexicalizedParser>(()=> LexicalizedParser.loadModel(StanfordNLPModelPath.PARSER));
 }
 
 public class Policy
