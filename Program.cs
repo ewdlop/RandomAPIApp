@@ -1,10 +1,15 @@
 using edu.stanford.nlp.ie.crf;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.parser.lexparser;
+using edu.stanford.nlp.pipeline;
 using edu.stanford.nlp.process;
+using edu.stanford.nlp.tagger.common;
 using edu.stanford.nlp.tagger.maxent;
+using edu.stanford.nlp.time;
 using edu.stanford.nlp.trees;
+using edu.stanford.nlp.util;
 using java.util;
+using javax.swing.text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -177,12 +182,54 @@ app.MapPost("/api/parser", ([FromBody] ParserDTO parser) =>
 .Produces(StatusCodes.Status401Unauthorized)
 .WithTags("Parser");
 
-app.MapPost("/api/NER", (string s1) => {
-    string outpt = StanfordNLP.NamedEntityRecognizer.Value.classifyToString(s1);
+app.MapPost("/api/ner", (string input) =>
+{
+    string outpt = StanfordNLP.NamedEntityRecognizer.Value.classifyToString(input);
     return Results.Ok(outpt);
 }).Produces<string>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status401Unauthorized)
-.WithTags("Named Entity Recognizer"); ;
+.WithTags("Named Entity Recognizer");
+
+app.MapPost("/api/sutime", (string input) =>
+{
+    //SUTime (Standford University Time) is a natural language processing tool that is used to identify and normalize time expressions in text. 
+    AnnotationPipeline pipeline = new AnnotationPipeline();
+    pipeline.addAnnotator(new TokenizerAnnotator(false));
+    pipeline.addAnnotator(new WordsToSentencesAnnotator(false));
+    pipeline.addAnnotator(new POSTaggerAnnotator(StanfordNLP.MaxentTagger.Value));
+
+    Properties props = new Properties();
+    props.setProperty("sutime.rules", StanfordNLPModelPath.SUTIME_RULES);
+    props.setProperty("sutime.binders", "0");
+    pipeline.addAnnotator(new TimeAnnotator("sutime", props));
+
+    Annotation annotation = new Annotation(input);
+    annotation.set(new CoreAnnotations.DocDateAnnotation().getClass(), "2013-07-14");
+    pipeline.annotate(annotation);
+
+    ArrayList? timexAnnsAll = annotation.get(new TimeAnnotations.TimexAnnotations().getClass()) as ArrayList;
+    if (timexAnnsAll is not null)
+    {
+        List<string> timeStrings = new List<string>();
+        foreach (CoreMap cm in timexAnnsAll)
+        {
+            List tokens = cm.get(new CoreAnnotations.TokensAnnotation().getClass()) as List;
+            object first = tokens.get(0);
+            object last = tokens.get(tokens.size() - 1);
+            TimeExpression time = cm.get(new TimeExpression.Annotation().getClass()) as TimeExpression;
+            string timeString = string.Format("{0} [from char offset {1} to {2}] --> {3}", cm, first, last, time.getTemporal());
+            timeStrings.Add(timeString);
+        }
+        return Results.Ok(timeStrings.ToArray());
+    }
+    else
+    {
+        return Results.Ok(new[] { "No Time Expression Found" });
+    }
+
+}).Produces<string[]>(StatusCodes.Status200OK)
+.Produces(StatusCodes.Status401Unauthorized)
+.WithTags("Stanford University Time");
 
 app.Run();
 
@@ -191,6 +238,7 @@ public class StanfordNLPModelPath
     public const string POS = "english-left3words-distsim.tagger";
     public const string PARSER = "englishPCFG.ser.gz"; //English Probabilistic Context-Free Grammar
     public const string NAMED_ENTITY_RECOGNIZER = "english.all.3class.distsim.crf.ser.gz";
+    public const string SUTIME_RULES = "defs.sutime.txt,english.holidays.sutime.txt,english.sutime.txt";
 }
 public static class StanfordNLP
 {
