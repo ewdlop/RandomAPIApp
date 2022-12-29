@@ -190,6 +190,28 @@ app.MapPost("/api/ner", (string input) =>
 .Produces(StatusCodes.Status401Unauthorized)
 .WithTags("Named Entity Recognizer");
 
+app.MapPost("api/dependencyParsing", () =>
+{
+    var props = new Properties();
+    props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse");
+    var pipeline = new StanfordCoreNLP(props);
+
+    // Annotate the input text
+    var annotation = new Annotation("I shot an elephant in my pajamas. How he got in my pajamas, I don't know.");
+    pipeline.annotate(annotation);
+
+    // Get the dependency parse tree for the first sentence
+    ArrayList? sentences = annotation.get(new CoreAnnotations.SentencesAnnotation().getClass()) as ArrayList;
+    CoreMap? sentence = sentences.get(0) as CoreMap;
+    SemanticGraph? tree = sentence.get(new SemanticGraphCoreAnnotations.BasicDependenciesAnnotation().getClass()) as SemanticGraph;
+
+    // Print out the dependencies
+    Console.WriteLine("Dependency parse tree:");
+    foreach (SemanticGraphEdge edge in tree.edgeListSorted().toArray().Cast<SemanticGraphEdge>())
+    {
+        Console.WriteLine($"{edge.getSource().word()} ({edge.getSource().tag()}) --{edge.getRelation()}--> {edge.getTarget().word()} ({edge.getTarget().tag()})");
+    }
+}).WithTags("DependencyParsing"); ;
 app.MapPost("/api/sutime", (string input) =>
 {
     //SUTime (Standford University Time) is a natural language processing tool that is used to identify and normalize time expressions in text. 
