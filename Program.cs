@@ -3,6 +3,7 @@ using edu.stanford.nlp.ling;
 using edu.stanford.nlp.parser.lexparser;
 using edu.stanford.nlp.pipeline;
 using edu.stanford.nlp.process;
+using edu.stanford.nlp.semgraph;
 using edu.stanford.nlp.tagger.common;
 using edu.stanford.nlp.tagger.maxent;
 using edu.stanford.nlp.time;
