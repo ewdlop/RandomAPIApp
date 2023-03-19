@@ -1,6 +1,7 @@
-import { createAsyncThunk, createEntityAdapter, createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createReducer, createAsyncThunk, createEntityAdapter, createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { fetchCount } from './counterAPI';
+import { OData } from "@odata/client";
 
 export interface CounterState {
   value: number;
@@ -13,6 +14,9 @@ const initialState: CounterState = {
   coutnerId: nanoid(), 
   status: 'idle',
 };
+
+
+const serviceEndpoint = "https://services.odata.org/V2/Northwind/Northwind.svc/"
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -27,11 +31,38 @@ export const incrementAsync = createAsyncThunk(
     return response.data;
   }
 );
-const booksAdapter = createEntityAdapter<CounterState>({
+export const fetchCustomersAsync = createAsyncThunk(
+  'counter/fetchCustomers',
+  async () => {
+    const client = OData.New4({ serviceEndpoint });
+    const filter = client.newFilter().property("Phone").eq("030-0074321");
+    const response = await client.newRequest({ // ODataRequest object
+      collection: "Customers", // entity set
+      params: client.newParam().filter(filter) // odata param
+    });
+    // The value we return becomes the `fulfilled` action payload
+    return response.value?.map((customer: any) => { return { id: customer.CustomerID, name: customer.CompanyName }});
+  }
+);
+
+export const counterAdapter = createEntityAdapter<CounterState>({
   // Assume IDs are stored in a field other than `book.id`
   selectId: (counter) => counter.coutnerId,
   // Keep the "all IDs" array sorted based on book titles
   sortComparer: (a, b) => a.status.localeCompare(b.status),
+})
+
+export const counterReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(increment, (state, action) => {
+      state.value++
+    })
+    .addCase(decrement, (state, action) => {
+      state.value--
+    })
+    .addCase(incrementByAmount, (state, action) => {
+      state.value += action.payload
+    })
 })
 
 export const counterSlice = createSlice({
