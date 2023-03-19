@@ -1,5 +1,10 @@
+import { createBrowserHistory } from 'history'
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { routerMiddleware } from 'connected-react-router'
 import counterReducer from '../features/counter/counterSlice';
+
+
+export const history = createBrowserHistory()
 
 export const store = configureStore({
   reducer: {

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/react-router-redux": "^5.0.21",
+    "connected-react-router": "^6.9.3",
+    "react-router-redux": "^4.0.8"
+  }
+}
