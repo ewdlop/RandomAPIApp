@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 
+//https://stackoverflow.com/questions/64557638/how-to-polyfill-node-core-modules-in-webpack-5
 const App  : FC = () => {
   return (
     <div className="App">
