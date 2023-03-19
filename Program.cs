@@ -8,12 +8,15 @@ using edu.stanford.nlp.tagger.maxent;
 using edu.stanford.nlp.time;
 using edu.stanford.nlp.trees;
 using edu.stanford.nlp.util;
+using java.beans;
 using java.util;
 using javax.swing.text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using RandomAPIApp.DTOs;
 using RandomAPIApp.Options;
@@ -85,6 +88,16 @@ builder.Services.AddAuthorizationBuilder()
   .AddPolicy(Policy.USER_NAME, policy =>
         policy.RequireClaim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Name));
 
+ODataConventionModelBuilder modelBuilder = new();
+modelBuilder.EntityType<OrderDTO>();
+modelBuilder.EntitySet<CustomerDTO>("Customers");
+
+builder.Services.AddControllers().AddOData(
+options =>
+{
+    options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
+    .AddRouteComponents("odata", modelBuilder.GetEdmModel());
+});
 
 WebApplication app = builder.Build();
 
