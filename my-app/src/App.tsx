@@ -54,5 +54,5 @@ const App  : FC = () => {
     </div>
   );
 }
-
+export const App2 = () => {};
 export default App;
