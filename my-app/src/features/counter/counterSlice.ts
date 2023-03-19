@@ -1,14 +1,16 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createEntityAdapter, createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { fetchCount } from './counterAPI';
 
 export interface CounterState {
   value: number;
+  coutnerId: string;
   status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: CounterState = {
   value: 0,
+  coutnerId: nanoid(), 
   status: 'idle',
 };
 
@@ -25,6 +27,12 @@ export const incrementAsync = createAsyncThunk(
     return response.data;
   }
 );
+const booksAdapter = createEntityAdapter<CounterState>({
+  // Assume IDs are stored in a field other than `book.id`
+  selectId: (counter) => counter.coutnerId,
+  // Keep the "all IDs" array sorted based on book titles
+  sortComparer: (a, b) => a.status.localeCompare(b.status),
+})
 
 export const counterSlice = createSlice({
   name: 'counter',
