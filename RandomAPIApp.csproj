@@ -11,9 +11,13 @@
 
   <ItemGroup>
     <Compile Remove="my-app\**" />
+    <Compile Remove="ui-app\**" />
     <Content Remove="my-app\**" />
+    <Content Remove="ui-app\**" />
     <EmbeddedResource Remove="my-app\**" />
+    <EmbeddedResource Remove="ui-app\**" />
     <None Remove="my-app\**" />
+    <None Remove="ui-app\**" />
   </ItemGroup>
 
   <ItemGroup>

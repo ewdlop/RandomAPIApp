@@ -3,17 +3,13 @@ using edu.stanford.nlp.ling;
 using edu.stanford.nlp.parser.lexparser;
 using edu.stanford.nlp.pipeline;
 using edu.stanford.nlp.process;
-using edu.stanford.nlp.tagger.common;
 using edu.stanford.nlp.tagger.maxent;
 using edu.stanford.nlp.time;
 using edu.stanford.nlp.trees;
 using edu.stanford.nlp.util;
-using java.beans;
 using java.util;
-using javax.swing.text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
@@ -83,6 +79,15 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddAuthorizationBuilder()
   .AddPolicy(Policy.USER_NAME, policy =>
@@ -92,12 +97,14 @@ ODataConventionModelBuilder modelBuilder = new();
 modelBuilder.EntityType<OrderDTO>();
 modelBuilder.EntitySet<CustomerDTO>("Customers");
 
-builder.Services.AddControllers().AddOData(
-options =>
-{
-    options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
-    .AddRouteComponents("odata", modelBuilder.GetEdmModel());
-});
+//builder.Services.AddControllers().AddOData(
+//options =>
+//{
+//    options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
+//    .AddRouteComponents("odata", modelBuilder.GetEdmModel());
+//});
+builder.Services.AddControllers();
+
 
 WebApplication app = builder.Build();
 
@@ -193,7 +200,7 @@ app.MapPost("/api/parser", ([FromBody] ParserDTO parser) =>
     });
 }).Produces<ParserDTO>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status401Unauthorized)
-.WithTags("Parser");
+.WithTags("Parser").RequireAuthorization(Policy.USER_NAME);
 
 app.MapPost("/api/ner", (string input) =>
 {
@@ -201,7 +208,7 @@ app.MapPost("/api/ner", (string input) =>
     return Results.Ok(outpt);
 }).Produces<string>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status401Unauthorized)
-.WithTags("Named Entity Recognizer");
+.WithTags("Named Entity Recognizer").RequireAuthorization(Policy.USER_NAME);
 
 app.MapPost("/api/sutime", (string input) =>
 {
@@ -242,7 +249,9 @@ app.MapPost("/api/sutime", (string input) =>
 
 }).Produces<string[]>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status401Unauthorized)
-.WithTags("Stanford University Time");
+.WithTags("Stanford University Time").RequireAuthorization(Policy.USER_NAME);
+
+app.MapControllers();
 
 app.Run();
 
@@ -263,4 +272,4 @@ public static class StanfordNLP
 public class Policy
 {
     public const string USER_NAME = "UserName";
-}
+} 

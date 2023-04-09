@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using RandomAPIApp.DTOs;
 
 namespace RandomAPIApp.Controllers;
-
 public class CustomersController : ODataController
 {
     private static Random random = new Random();
