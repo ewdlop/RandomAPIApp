@@ -1,28 +1,45 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { Route, Switch } from 'react-router' // react-router v4/v5
-import { ConnectedRouter } from 'connected-react-router'
 import { store, history } from './app/store';
 import dotenv from 'dotenv';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Movie from './Movie';
 //dotenv.config();
 const container = document.getElementById('root')!;
 const root = createRoot(container);
-const localStore = 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/movie",
+    element: <Movie />,
+  },
+]);
+
+const setToken = (token: string) => {
+  localStorage.setItem('token', token);
+};
+
+const getToken = () => {
+  return localStorage.getItem('token');
+};
+
+const jwt = process.env.REACT_APP_TOKEN || '';
+setToken(jwt);
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <ConnectedRouter history={history}>
-        <Route path="/" component={App}>
-          <Route path="foo" component={Foo}/>
-          <Route path="bar" component={Bar}/>
-        </Route>
-        </ConnectedRouter> */}
-      <App />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );

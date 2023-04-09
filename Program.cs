@@ -117,6 +117,8 @@ app.UseSwaggerUI(options =>
 
 app.UseHttpsRedirection();
 
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -251,7 +253,8 @@ app.MapPost("/api/sutime", (string input) =>
 .Produces(StatusCodes.Status401Unauthorized)
 .WithTags("Stanford University Time").RequireAuthorization(Policy.USER_NAME);
 
-app.MapControllers();
+app.MapControllers().RequireCors("MyPolicy");
+;
 
 app.Run();
 

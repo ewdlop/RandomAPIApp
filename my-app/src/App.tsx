@@ -1,6 +1,5 @@
 import React, { FC} from 'react';
 import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
 
 //https://stackoverflow.com/questions/64557638/how-to-polyfill-node-core-modules-in-webpack-5
@@ -9,7 +8,6 @@ const App  : FC = () => {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
@@ -55,5 +53,4 @@ const App  : FC = () => {
     </div>
   );
 }
-export const App2 = () => {};
 export default App;
