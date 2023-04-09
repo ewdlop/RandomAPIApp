@@ -10,7 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="my-app\**" />
+    <Compile Remove="ui-app\**" />
+    <Content Remove="my-app\**" />
+    <Content Remove="ui-app\**" />
+    <EmbeddedResource Remove="my-app\**" />
+    <EmbeddedResource Remove="ui-app\**" />
+    <None Remove="my-app\**" />
+    <None Remove="ui-app\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.25.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
