@@ -1,4 +1,3 @@
-using com.sun.tools.@internal.xjc.reader.gbind;
 using com.sun.tools.javac.util;
 using edu.stanford.nlp.ie.crf;
 using edu.stanford.nlp.ling;
@@ -21,7 +20,7 @@ using RandomAPIApp.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using static com.sun.tools.javah.Util;
+using List = java.util.List;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
