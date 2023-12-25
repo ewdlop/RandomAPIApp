@@ -1,3 +1,4 @@
+using com.sun.tools.javac.util;
 using edu.stanford.nlp.ie.crf;
 using edu.stanford.nlp.ling;
 using edu.stanford.nlp.parser.lexparser;
@@ -19,6 +20,7 @@ using RandomAPIApp.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using List = java.util.List;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -235,10 +237,16 @@ app.MapPost("/api/sutime", (string input) =>
         List<string> timeStrings = new List<string>();
         foreach (CoreMap cm in timexAnnsAll)
         {
-            List tokens = cm.get(new CoreAnnotations.TokensAnnotation().getClass()) as List;
+            if (cm.get(new CoreAnnotations.TokensAnnotation().getClass()) is not List tokens)
+            {
+                continue;
+            }
             object first = tokens.get(0);
             object last = tokens.get(tokens.size() - 1);
-            TimeExpression time = cm.get(new TimeExpression.Annotation().getClass()) as TimeExpression;
+            if (cm.get(new TimeExpression.Annotation().getClass()) is not TimeExpression time)
+            {
+                continue;
+            }
             string timeString = string.Format("{0} [from char offset {1} to {2}] --> {3}", cm, first, last, time.getTemporal());
             timeStrings.Add(timeString);
         }
@@ -254,9 +262,9 @@ app.MapPost("/api/sutime", (string input) =>
 .WithTags("Stanford University Time").RequireAuthorization(Policy.USER_NAME);
 
 app.MapControllers().RequireCors("MyPolicy");
-;
 
 app.Run();
+
 
 public class StanfordNLPModelPath
 {
