@@ -1,0 +1,6 @@
+@RandomAPIApp.一袋米要扛二楼_HostAddress = http://localhost:5222
+
+GET {{RandomAPIApp.一袋米要扛二楼_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

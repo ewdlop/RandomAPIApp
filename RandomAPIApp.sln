@@ -5,6 +5,16 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomAPIApp", "RandomAPIApp.csproj", "{B1EE09B9-8D11-467D-8330-796A67DA8C15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomAPIApp.AppHost", "RandomAPIApp.AppHost\RandomAPIApp.AppHost.csproj", "{6836B402-F7C2-493B-88B6-6D8BA32FADFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomAPIApp.ServiceDefaults", "RandomAPIApp.ServiceDefaults\RandomAPIApp.ServiceDefaults.csproj", "{2EC32131-27F6-4861-BE4A-544501EC8027}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomAPIApp.一袋米抗二楼", "..\RandomAPIApp.一袋米抗二楼\RandomAPIApp.一袋米抗二楼.csproj", "{BBB396BB-94B8-49B8-B0B0-252AFB18C2F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomAPIApp.一袋米要扛几楼", "..\RandomAPIApp.一袋米要扛几楼\RandomAPIApp.一袋米要扛几楼.csproj", "{6BA00587-9C55-45A4-854B-CEEFAFAE6C44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomAPIApp.神罗天征", "..\RandomAPIApp.神罗天征\RandomAPIApp.神罗天征.csproj", "{2F090DDB-44CF-4457-A776-A42365DE515A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,26 @@ Global
 		{B1EE09B9-8D11-467D-8330-796A67DA8C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1EE09B9-8D11-467D-8330-796A67DA8C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1EE09B9-8D11-467D-8330-796A67DA8C15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6836B402-F7C2-493B-88B6-6D8BA32FADFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6836B402-F7C2-493B-88B6-6D8BA32FADFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6836B402-F7C2-493B-88B6-6D8BA32FADFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6836B402-F7C2-493B-88B6-6D8BA32FADFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EC32131-27F6-4861-BE4A-544501EC8027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EC32131-27F6-4861-BE4A-544501EC8027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EC32131-27F6-4861-BE4A-544501EC8027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EC32131-27F6-4861-BE4A-544501EC8027}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBB396BB-94B8-49B8-B0B0-252AFB18C2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB396BB-94B8-49B8-B0B0-252AFB18C2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB396BB-94B8-49B8-B0B0-252AFB18C2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB396BB-94B8-49B8-B0B0-252AFB18C2F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BA00587-9C55-45A4-854B-CEEFAFAE6C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BA00587-9C55-45A4-854B-CEEFAFAE6C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BA00587-9C55-45A4-854B-CEEFAFAE6C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BA00587-9C55-45A4-854B-CEEFAFAE6C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F090DDB-44CF-4457-A776-A42365DE515A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F090DDB-44CF-4457-A776-A42365DE515A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F090DDB-44CF-4457-A776-A42365DE515A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F090DDB-44CF-4457-A776-A42365DE515A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
