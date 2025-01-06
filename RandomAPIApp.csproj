@@ -11,13 +11,34 @@
 
   <ItemGroup>
     <Compile Remove="my-app\**" />
+    <Compile Remove="RandomAPIApp.AppHost\**" />
+    <Compile Remove="RandomAPIApp.ServiceDefaults\**" />
+    <Compile Remove="RandomAPIApp.一袋米要扛二楼\**" />
+    <Compile Remove="RandomAPIApp.一袋米要扛几楼\**" />
     <Compile Remove="ui-app\**" />
     <Content Remove="my-app\**" />
+    <Content Remove="RandomAPIApp.AppHost\**" />
+    <Content Remove="RandomAPIApp.ServiceDefaults\**" />
+    <Content Remove="RandomAPIApp.一袋米要扛二楼\**" />
+    <Content Remove="RandomAPIApp.一袋米要扛几楼\**" />
     <Content Remove="ui-app\**" />
     <EmbeddedResource Remove="my-app\**" />
+    <EmbeddedResource Remove="RandomAPIApp.AppHost\**" />
+    <EmbeddedResource Remove="RandomAPIApp.ServiceDefaults\**" />
+    <EmbeddedResource Remove="RandomAPIApp.一袋米要扛二楼\**" />
+    <EmbeddedResource Remove="RandomAPIApp.一袋米要扛几楼\**" />
     <EmbeddedResource Remove="ui-app\**" />
     <None Remove="my-app\**" />
+    <None Remove="RandomAPIApp.AppHost\**" />
+    <None Remove="RandomAPIApp.ServiceDefaults\**" />
+    <None Remove="RandomAPIApp.一袋米要扛二楼\**" />
+    <None Remove="RandomAPIApp.一袋米要扛几楼\**" />
     <None Remove="ui-app\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE" />
   </ItemGroup>
 
   <ItemGroup>
