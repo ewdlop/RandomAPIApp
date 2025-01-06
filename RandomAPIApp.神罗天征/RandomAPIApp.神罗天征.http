@@ -1,0 +1,6 @@
+@RandomAPIApp.神罗天征_HostAddress = http://localhost:5294
+
+GET {{RandomAPIApp.神罗天征_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

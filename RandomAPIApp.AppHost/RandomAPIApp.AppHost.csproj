@@ -16,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\RandomAPIApp.一袋米抗二楼\RandomAPIApp.一袋米抗二楼.csproj" />
-    <ProjectReference Include="..\..\RandomAPIApp.一袋米要扛几楼\RandomAPIApp.一袋米要扛几楼.csproj" />
-    <ProjectReference Include="..\..\RandomAPIApp.神罗天征\RandomAPIApp.神罗天征.csproj" />
     <ProjectReference Include="..\RandomAPIApp.csproj" />
+    <ProjectReference Include="..\RandomAPIApp.一袋米要扛二楼\RandomAPIApp.一袋米要扛二楼.csproj" />
+    <ProjectReference Include="..\RandomAPIApp.一袋米要扛几楼\RandomAPIApp.一袋米要扛几楼.csproj" />
+    <ProjectReference Include="..\RandomAPIApp.神罗天征\RandomAPIApp.神罗天征.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,4 +10,6 @@ Enumerable.Range(0, 128).ToList().ForEach((int x) =>
         .WithArgs(x.ToString());
 });
 
+builder.AddProject<Projects.RandomAPIApp_一袋米要扛二楼>("RandomAPIApp_一袋米抗二楼");
+
 builder.Build().Run();
